@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'views/index.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -46,7 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  SizedBox(), // TODO: map view
+                  MapScreenView(),
                   SizedBox(), // TODO: feed view
                   SizedBox(), // TODO: calculator view
                 ],

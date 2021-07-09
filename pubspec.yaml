@@ -39,6 +39,10 @@ dependencies:
   shared_preferences: 2.0.6
   google_sign_in: 5.0.4
   webfeed: 0.7.0
+  vector_math: 2.1.0
+  mapbox_api: 1.0.0
+  http: 0.13.3
+  map_launcher: 2.1.1
 
 dev_dependencies:
   flutter_test:

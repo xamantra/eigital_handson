@@ -38,6 +38,7 @@ class _RootWidgetState extends State<RootWidget> {
         });
       });
       await authCubit.init();
+      // await mapCubit.initMarkers();
     });
   }
 
