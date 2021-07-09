@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "539243821399",
+    "project_id": "eigital-handson-exam",
+    "storage_bucket": "eigital-handson-exam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539243821399:android:430f4c553e734a7197a612",
+        "android_client_info": {
+          "package_name": "dev.xamantra.eigital_handson"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539243821399-psc2gjdf6vmfvmf4inesmv6k7tvishef.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.xamantra.eigital_handson",
+            "certificate_hash": "ead68a87c41737ae136efa994e2bc6e91b9204e5"
+          }
+        },
+        {
+          "client_id": "539243821399-3ccpv9koeku4b3harg97crkalfo52qv1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZD9yjdNSjbZRCrBrh_Zou3DCQjyR5RH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539243821399-3ccpv9koeku4b3harg97crkalfo52qv1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

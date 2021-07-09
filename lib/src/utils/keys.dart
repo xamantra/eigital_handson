@@ -1,0 +1,1 @@
+const AUTH_STATE_KEY = 'AUTH_STATE_KEY';

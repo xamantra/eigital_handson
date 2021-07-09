@@ -1,8 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.eigital_handson">
+    package="dev.xamantra.eigital_handson">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    
    <application
-        android:label="eigital_handson"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Eigital Hands-on"
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -37,5 +42,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBZD9yjdNSjbZRCrBrh_Zou3DCQjyR5RH4"/>
     </application>
 </manifest>
