@@ -57,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  expressions:
+    dependency: "direct main"
+    description:
+      name: expressions
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.3"
   fake_async:
     dependency: transitive
     description:
@@ -156,6 +163,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  function_tree:
+    dependency: "direct main"
+    description:
+      name: function_tree
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.12"
   google_maps_flutter:
     dependency: "direct main"
     description:
@@ -359,6 +373,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.1"
   shared_preferences:
     dependency: "direct main"
     description:

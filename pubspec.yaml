@@ -36,6 +36,8 @@ dependencies:
   flutter_polyline_points: 1.0.0
   location: 4.3.0
   math_expressions: 2.1.1
+  function_tree: 0.8.12
+  expressions: 0.2.3
   shared_preferences: 2.0.6
   google_sign_in: 5.0.4
   webfeed: 0.7.0

@@ -1,3 +1,4 @@
+import 'package:eigital_handson/src/cubits/cubits.dart';
 import 'package:flutter/material.dart';
 
 import 'views/index.dart';
@@ -22,7 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: Text(authCubit(context).state.name),
         elevation: 0,
       ),
       body: Container(
@@ -50,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                 children: [
                   MapScreenView(),
                   FeedScreenView(),
-                  SizedBox(), // TODO: calculator view
+                  CalculatorScreenView(),
                 ],
               ),
             ),
