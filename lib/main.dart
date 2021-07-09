@@ -25,6 +25,7 @@ class _RootWidgetState extends State<RootWidget> {
   final AuthCubit authCubit = AuthCubit();
   final CalculatorCubit calculatorCubit = CalculatorCubit();
   final MapCubit mapCubit = MapCubit();
+  final FeedCubit feedCubit = FeedCubit();
 
   bool _loggedIn = false;
 
@@ -49,6 +50,7 @@ class _RootWidgetState extends State<RootWidget> {
         BlocProvider(create: (_) => authCubit),
         BlocProvider(create: (_) => calculatorCubit),
         BlocProvider(create: (_) => mapCubit),
+        BlocProvider(create: (_) => feedCubit),
       ],
       child: MyApp(
         initialScreen: _loggedIn ? DashboardScreen() : LoginScreen(),

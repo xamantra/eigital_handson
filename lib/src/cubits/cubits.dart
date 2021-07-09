@@ -14,3 +14,7 @@ MapCubit mapCubit(BuildContext context) {
 CalculatorCubit calculatorCubit(BuildContext context) {
   return BlocProvider.of<CalculatorCubit>(context);
 }
+
+FeedCubit feedCubit(BuildContext context) {
+  return BlocProvider.of<FeedCubit>(context);
+}

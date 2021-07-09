@@ -49,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProv
                 controller: tabController,
                 children: [
                   MapScreenView(),
-                  SizedBox(), // TODO: feed view
+                  FeedScreenView(),
                   SizedBox(), // TODO: calculator view
                 ],
               ),
