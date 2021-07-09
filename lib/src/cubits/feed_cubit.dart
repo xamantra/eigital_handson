@@ -25,6 +25,7 @@ class FeedCubitState {
 class FeedCubit extends Cubit<FeedCubitState> {
   FeedCubit() : super(FeedCubitState());
 
+  /// Fetches rss feed from BBC News
   Future<void> loadFeed() async {
     emit(state.copyWith(loading: true));
     var url = Uri.parse('http://feeds.bbci.co.uk/news/world/rss.xml');

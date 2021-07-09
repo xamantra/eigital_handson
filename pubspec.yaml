@@ -1,20 +1,6 @@
 name: eigital_handson
 description: A new Flutter project.
-
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
@@ -25,42 +11,43 @@ dependencies:
     sdk: flutter
 
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+  # state management
   flutter_bloc: 7.0.1
+  shared_preferences: 2.0.6
+  # state management
+
+  # login
   firebase_core: 1.3.0
   firebase_auth: 2.0.0
-  google_maps_flutter: 2.0.6
-  flutter_polyline_points: 1.0.0
-  location: 4.3.0
-  math_expressions: 2.1.1
-  function_tree: 0.8.12
-  expressions: 0.2.3
-  shared_preferences: 2.0.6
-  google_sign_in: 5.0.4
-  webfeed: 0.7.0
-  vector_math: 2.1.0
-  mapbox_api: 1.0.0
-  http: 0.13.3
-  map_launcher: 2.1.1
-  url_launcher: 6.0.9
   flutter_facebook_auth: 3.5.0
+  google_sign_in: 5.0.4
+  # login
+
+  # maps
+  location: 4.3.0
+  google_maps_flutter: 2.0.6
+  map_launcher: 2.1.1
+  flutter_polyline_points: 1.0.0 # unused to due to google cloud billing limitations
+  vector_math: 2.1.0 # unused, random long-lat is not the correct solution.
+  # maps
+
+  # newsfeed
+  webfeed: 0.7.0
+  http: 0.13.3
+  url_launcher: 6.0.9
+  # newsfeed
+
+  # MDAS calculator
+  math_expressions: 2.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
 
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
 
   assets:

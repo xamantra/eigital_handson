@@ -74,6 +74,8 @@ class AuthCubit extends Cubit<AuthCubitState> {
     updateState(state.copyWith(loading: false));
   }
 
+  /// Makes the state persistent.
+  /// When user closes the app the session will be retrieved back.
   void updateState(AuthCubitState state) async {
     emit(state);
     await sharedPreferences.setString(AUTH_STATE_KEY, state.toJson());

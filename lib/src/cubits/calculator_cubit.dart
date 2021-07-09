@@ -39,6 +39,7 @@ class CalculatorCubit extends Cubit<CalculatorCubitState> {
     _updateOutput();
   }
 
+  /// Calculates the user input as math expression.
   void _updateOutput() {
     try {
       if (state.userInput.isEmpty) {

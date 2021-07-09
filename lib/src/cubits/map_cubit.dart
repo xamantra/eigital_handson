@@ -169,10 +169,11 @@ class MapCubit extends Cubit<MapCubitState> {
   // }
 
   Future<NearbyPlaceItem> getRandomPlace() async {
-    final places = await getNearbyPlaces(10);
-    return (places.data..shuffle()).first;
+    final places = await getNearbyPlaces(10); // 10 KM radius.
+    return (places.data..shuffle()).first; // pick random
   }
 
+  /// Fetches 50 nearby places within N Kilometer radius.
   Future<NearbyPlacesResponse> getNearbyPlaces(int kilometerRadius) async {
     try {
       var url = Uri.parse('https://us1.locationiq.com/v1/nearby.php?key=pk.bd6c1133d93ecc68cd9fa8b565a5e504&lat=7.091095&lon=125.607328&radius=${kilometerRadius * 1000}&limit=50');
@@ -184,6 +185,7 @@ class MapCubit extends Cubit<MapCubitState> {
     }
   }
 
+  /// After picking a random place, launch the map app with routes for navigation.
   Future<void> openRandom() async {
     emit(state.copyWith(loading: true));
     final availableMaps = await MapLauncher.installedMaps;
