@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../cubits/index.dart';
 
@@ -37,8 +38,14 @@ class _FeedScreenViewState extends State<FeedScreenView> {
             final item = snapshot.feed[index];
             return ListTile(
               title: Text(item.title ?? ''),
-              subtitle: Text(item.source?.value ?? ''),
-              onTap: () {},
+              subtitle: Text(item.description ?? ''),
+              onTap: () {
+                try {
+                  launch(item.link ?? '');
+                } catch (e) {
+                  print(e);
+                }
+              },
               minVerticalPadding: 18,
             );
           },

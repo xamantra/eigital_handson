@@ -27,7 +27,7 @@ class FeedCubit extends Cubit<FeedCubitState> {
 
   Future<void> loadFeed() async {
     emit(state.copyWith(loading: true));
-    var url = Uri.parse('https://news.google.com/news/rss');
+    var url = Uri.parse('http://feeds.bbci.co.uk/news/world/rss.xml');
     var response = await http.get(url);
     final rss = RssFeed.parse(response.body);
     emit(state.copyWith(loading: false, feed: rss.items));
