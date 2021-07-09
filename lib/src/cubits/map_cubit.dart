@@ -185,6 +185,7 @@ class MapCubit extends Cubit<MapCubitState> {
   }
 
   Future<void> openRandom() async {
+    emit(state.copyWith(loading: true));
     final availableMaps = await MapLauncher.installedMaps;
     if (availableMaps.isNotEmpty) {
       final random = await getRandomPlace();
@@ -208,6 +209,7 @@ class MapCubit extends Cubit<MapCubitState> {
         ),
       );
     }
+    emit(state.copyWith(loading: false));
   }
 
   // void setMapPins() {
