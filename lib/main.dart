@@ -32,12 +32,12 @@ class _RootWidgetState extends State<RootWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Future.microtask(() async {
-      authCubit.stream.listen((event) {
-        setState(() {
-          _loggedIn = event.loggedIn;
-        });
+    authCubit.stream.listen((event) {
+      setState(() {
+        _loggedIn = event.loggedIn;
       });
+    });
+    Future.microtask(() async {
       await authCubit.init();
       // await mapCubit.initMarkers();
     });
