@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:eigital_handson/src/utils/index.dart';
+import '../utils/index.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';

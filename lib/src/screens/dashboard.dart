@@ -1,4 +1,4 @@
-import 'package:eigital_handson/src/cubits/cubits.dart';
+import '../cubits/cubits.dart';
 import 'package:flutter/material.dart';
 
 import 'views/index.dart';

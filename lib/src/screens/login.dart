@@ -1,4 +1,4 @@
-import 'package:eigital_handson/src/cubits/auth_cubit.dart';
+import '../cubits/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
