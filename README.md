@@ -38,3 +38,9 @@ I encountered a kind of "small" problem with this. This is the example from the 
 - Inputting `7+2*(4-2)/2` did the job and return the correct result.
 - Basic calculations seem to work fine.
 
+
+
+
+### Sample ouuput
+
+https://user-images.githubusercontent.com/37391380/125145909-0313d300-e156-11eb-8606-0fa9b67b25d4.mp4
