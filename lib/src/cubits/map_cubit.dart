@@ -168,8 +168,8 @@ class MapCubit extends Cubit<MapCubitState> {
     );
     setMapPins();
     await setPolylines();
-    updateCamera();
     emit(state.copyWith(loading: false));
+    await updateCamera();
   }
 
   Future<NearbyPlaceItem> getRandomPlace() async {
