@@ -29,7 +29,7 @@ dependencies:
   location: 4.3.0
   google_maps_flutter: 2.0.6
   map_launcher: 2.1.1
-  flutter_polyline_points: 1.0.0 # unused to due to google cloud billing limitations
+  flutter_polyline_points: 1.0.0 # unused due to google cloud billing limitations
   vector_math: 2.1.0 # unused, random long-lat is not the correct solution.
   # maps
 
