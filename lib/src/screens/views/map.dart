@@ -50,6 +50,8 @@ class _MapScreenViewState extends State<MapScreenView> {
                 myLocationEnabled: true,
                 compassEnabled: true,
                 tiltGesturesEnabled: false,
+                markers: snapshot.markers,
+                polylines: snapshot.polylines,
                 mapType: MapType.normal,
                 onMapCreated: (controller) {
                   mapCubit(context).activateMap(controller);
@@ -61,11 +63,23 @@ class _MapScreenViewState extends State<MapScreenView> {
                 },
               ),
             ),
-            ElevatedButton(
-              child: Text('GO TO RANDOM'),
-              onPressed: () {
-                mapCubit(context).openRandom();
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: Text('GO TO RANDOM'),
+                  onPressed: () {
+                    mapCubit(context).newRandomLocation();
+                  },
+                ),
+                SizedBox(width: 16),
+                ElevatedButton(
+                  child: Text('OPEN RANDOM'),
+                  onPressed: () {
+                    mapCubit(context).openRandom();
+                  },
+                ),
+              ],
             ),
           ],
         );

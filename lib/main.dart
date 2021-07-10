@@ -39,6 +39,7 @@ class _RootWidgetState extends State<RootWidget> {
     });
     Future.microtask(() async {
       await authCubit.init();
+      await mapCubit.initMarkers();
     });
   }
 

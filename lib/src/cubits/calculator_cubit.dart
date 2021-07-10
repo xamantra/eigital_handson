@@ -51,6 +51,14 @@ class CalculatorCubit extends Cubit<CalculatorCubitState> {
       ContextModel cm = ContextModel();
       final result = exp.evaluate(EvaluationType.REAL, cm);
       emit(state.copyWith(output: result.toString()));
+
+      // emit(state.copyWith(output: state.userInput.interpret().toString()));
+
+      // Expression expression = Expression.parse(state.userInput);
+      // var context = <String, dynamic>{};
+      // final evaluator = const ExpressionEvaluator();
+      // var r = evaluator.eval(expression, context);
+      // emit(state.copyWith(output: r.toString()));
     } catch (e) {
       emit(state.copyWith(output: 'Syntax Error'));
     }
