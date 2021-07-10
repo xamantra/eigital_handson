@@ -28,6 +28,8 @@ class _MapScreenViewState extends State<MapScreenView> {
       bloc: mapCubit(context),
       builder: (context, snapshot) {
         final userLocation = snapshot.userLocation;
+        final distance = snapshot.targetRouteDistance;
+        final duration = snapshot.targetRouteDuration;
         if (snapshot.loading) {
           return Center(
             child: SizedBox(
@@ -63,21 +65,58 @@ class _MapScreenViewState extends State<MapScreenView> {
                 },
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
-                ElevatedButton(
-                  child: Text('GO TO RANDOM'),
-                  onPressed: () {
-                    mapCubit(context).newRandomLocation();
-                  },
-                ),
-                SizedBox(width: 16),
-                ElevatedButton(
-                  child: Text('OPEN RANDOM'),
-                  onPressed: () {
-                    mapCubit(context).openRandom();
-                  },
+                snapshot.randomPlaceName.isEmpty
+                    ? SizedBox()
+                    : Container(
+                        padding: EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              snapshot.randomPlaceName,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${distance < 1000 ? distance : (distance / 1000).toStringAsFixed(2)}${distance < 1000 ? "M" : "Km"}',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  ' - ${(duration / 60).toStringAsFixed(1)} minutes',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: Text('GO TO RANDOM'),
+                      onPressed: () {
+                        mapCubit(context).newRandomLocation();
+                      },
+                    ),
+                    SizedBox(width: 16),
+                    ElevatedButton(
+                      child: Text('OPEN RANDOM'),
+                      onPressed: () {
+                        mapCubit(context).openRandom();
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

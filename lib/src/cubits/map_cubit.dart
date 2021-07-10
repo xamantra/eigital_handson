@@ -16,6 +16,9 @@ class MapCubitState {
   final LocationData? userLocation;
   final LocationData? randomLocation;
 
+  final Route? targetRoute;
+  final NearbyPlaceItem? randomPlace;
+
   final GoogleMapController? controller;
   final Set<Marker> markers;
   final Set<Polyline> polylines;
@@ -26,10 +29,16 @@ class MapCubitState {
   final bool loading;
   final bool initialized;
 
+  double get targetRouteDistance => targetRoute?.distance ?? 0.0;
+  double get targetRouteDuration => targetRoute?.duration ?? 0.0;
+  String get randomPlaceName => randomPlace?.displayName ?? '';
+
   MapCubitState({
     this.userLocation,
     this.controller,
     this.randomLocation,
+    this.targetRoute,
+    this.randomPlace,
     required this.loading,
     this.initialized = false,
     this.sourceIcon,
@@ -43,6 +52,8 @@ class MapCubitState {
   MapCubitState copyWith({
     LocationData? userLocation,
     LocationData? randomLocation,
+    Route? targetRoute,
+    NearbyPlaceItem? randomPlace,
     GoogleMapController? controller,
     bool? loading,
     bool? initialized,
@@ -54,6 +65,8 @@ class MapCubitState {
     return MapCubitState(
       userLocation: userLocation ?? this.userLocation,
       randomLocation: randomLocation ?? this.randomLocation,
+      targetRoute: targetRoute ?? this.targetRoute,
+      randomPlace: randomPlace ?? this.randomPlace,
       controller: controller ?? this.controller,
       loading: loading ?? this.loading,
       initialized: initialized ?? this.initialized,
@@ -168,7 +181,7 @@ class MapCubit extends Cubit<MapCubitState> {
     );
     setMapPins();
     await setPolylines();
-    emit(state.copyWith(loading: false));
+    emit(state.copyWith(loading: false, randomPlace: random));
     await updateCamera();
   }
 
@@ -280,6 +293,6 @@ class MapCubit extends Cubit<MapCubitState> {
     var polylines = <Polyline>{};
     polylines.add(polyline);
 
-    emit(state.copyWith(polylines: polylines));
+    emit(state.copyWith(polylines: polylines, targetRoute: response.routes[0]));
   }
 }
