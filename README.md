@@ -41,6 +41,6 @@ I encountered a kind of "small" problem with this. This is the example from the 
 
 
 
-### Sample ouuput
+### Sample output
 
 https://user-images.githubusercontent.com/37391380/125145909-0313d300-e156-11eb-8606-0fa9b67b25d4.mp4
