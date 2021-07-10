@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:webfeed/webfeed.dart';
+
+import '../services/index.dart';
 
 class FeedCubitState {
   final bool loading;
@@ -25,12 +26,11 @@ class FeedCubitState {
 class FeedCubit extends Cubit<FeedCubitState> {
   FeedCubit() : super(FeedCubitState());
 
-  /// Fetches rss feed from BBC News
+  final api = ApiService();
+
   Future<void> loadFeed() async {
     emit(state.copyWith(loading: true));
-    var url = Uri.parse('http://feeds.bbci.co.uk/news/world/rss.xml');
-    var response = await http.get(url);
-    final rss = RssFeed.parse(response.body);
+    final rss = await api.getRss();
     emit(state.copyWith(loading: false, feed: rss.items));
   }
 }

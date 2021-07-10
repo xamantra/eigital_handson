@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:eigital_handson/src/models/routes.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 // import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 import '../models/index.dart';
+import '../models/routes.dart';
+import '../services/index.dart';
 
 class MapCubitState {
   final LocationData? userLocation;
@@ -27,7 +27,6 @@ class MapCubitState {
   final BitmapDescriptor? destinationIcon;
 
   final bool loading;
-  final bool initialized;
 
   double get targetRouteDistance => targetRoute?.distance ?? 0.0;
   double get targetRouteDuration => targetRoute?.duration ?? 0.0;
@@ -40,14 +39,17 @@ class MapCubitState {
     this.targetRoute,
     this.randomPlace,
     required this.loading,
-    this.initialized = false,
     this.sourceIcon,
     this.destinationIcon,
-    this.markers = const {},
-    this.polylines = const {},
+    required this.markers,
+    required this.polylines,
   });
 
-  factory MapCubitState.init() => MapCubitState(loading: true);
+  factory MapCubitState.init() => MapCubitState(
+        loading: true,
+        markers: {},
+        polylines: {},
+      );
 
   MapCubitState copyWith({
     LocationData? userLocation,
@@ -56,7 +58,6 @@ class MapCubitState {
     NearbyPlaceItem? randomPlace,
     GoogleMapController? controller,
     bool? loading,
-    bool? initialized,
     Set<Marker>? markers,
     Set<Polyline>? polylines,
     BitmapDescriptor? sourceIcon,
@@ -69,7 +70,6 @@ class MapCubitState {
       randomPlace: randomPlace ?? this.randomPlace,
       controller: controller ?? this.controller,
       loading: loading ?? this.loading,
-      initialized: initialized ?? this.initialized,
       markers: markers ?? this.markers,
       polylines: polylines ?? this.polylines,
       sourceIcon: sourceIcon ?? this.sourceIcon,
@@ -81,6 +81,7 @@ class MapCubitState {
 class MapCubit extends Cubit<MapCubitState> {
   MapCubit() : super(MapCubitState.init());
 
+  final api = ApiService();
   final Completer<GoogleMapController> completer = Completer();
   final PolylinePoints polylinePoints = PolylinePoints();
 
@@ -88,10 +89,7 @@ class MapCubit extends Cubit<MapCubitState> {
   double get lat => state.userLocation?.latitude ?? 0.0;
 
   void initMap() async {
-    if (state.initialized) {
-      return;
-    }
-    emit(state.copyWith(loading: true, initialized: true));
+    emit(state.copyWith(loading: true));
     Location location = new Location();
 
     bool _serviceEnabled;
@@ -123,32 +121,12 @@ class MapCubit extends Cubit<MapCubitState> {
       _updateUserLocation(location);
     });
 
-    await updateCamera();
     emit(state.copyWith(loading: false));
   }
 
   void activateMap(GoogleMapController controller) {
+    if (completer.isCompleted) return;
     completer.complete(controller);
-  }
-
-  Future<void> updateCamera() async {
-    if (state.controller != null) {
-      if (state.randomLocation != null) {
-        await state.controller?.moveCamera(
-          CameraUpdate.newLatLngBounds(
-            LatLngBounds(
-              northeast: LatLng(lat, long),
-              southwest: LatLng(state.randomLocation?.latitude ?? 0, state.randomLocation?.longitude ?? 0),
-            ),
-            4,
-          ),
-        );
-      } else {
-        await state.controller?.moveCamera(
-          CameraUpdate.newLatLngZoom(LatLng(lat, long), 20),
-        );
-      }
-    }
   }
 
   Future<void> initMarkers() async {
@@ -182,39 +160,11 @@ class MapCubit extends Cubit<MapCubitState> {
     setMapPins();
     await setPolylines();
     emit(state.copyWith(loading: false, randomPlace: random));
-    await updateCamera();
   }
 
   Future<NearbyPlaceItem> getRandomPlace() async {
-    final places = await getNearbyPlaces(10, long, lat); // 10 KM radius.
+    final places = await api.getNearbyPlaces(10, long, lat); // 10 KM radius.
     return (places.data..shuffle()).first; // pick random
-  }
-
-  /// Fetches 50 nearby places within N Kilometer radius.
-  Future<NearbyPlacesResponse> getNearbyPlaces(
-    int kilometerRadius,
-    double long,
-    double lat,
-  ) async {
-    try {
-      var url = Uri.parse('https://us1.locationiq.com/v1/nearby.php?key=pk.bd6c1133d93ecc68cd9fa8b565a5e504&lat=$lat&lon=$long&radius=${kilometerRadius * 1000}&limit=50');
-      var response = await http.get(url);
-      return NearbyPlacesResponse.fromRawJson(response.body);
-    } catch (e, trace) {
-      print(trace);
-      return NearbyPlacesResponse(data: []);
-    }
-  }
-
-  Future<RoutesResponse> getRoutes(LocationData? from, LocationData? to) async {
-    try {
-      var url = Uri.parse('https://us1.locationiq.com/v1/directions/driving/${from?.longitude},${from?.latitude};${to?.longitude},${to?.latitude}?key=pk.bd6c1133d93ecc68cd9fa8b565a5e504');
-      var response = await http.get(url);
-      return RoutesResponse.fromRawJson(response.body);
-    } catch (e, trace) {
-      print(trace);
-      return RoutesResponse(code: '', routes: [], waypoints: []);
-    }
   }
 
   /// After picking a random place, launch the map app with routes for navigation.
@@ -266,7 +216,7 @@ class MapCubit extends Cubit<MapCubitState> {
   }
 
   Future<void> setPolylines() async {
-    final response = await getRoutes(state.userLocation, state.randomLocation);
+    final response = await api.getRoutes(state.userLocation, state.randomLocation);
     if (response.routes.isEmpty) {
       return;
     }
