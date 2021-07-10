@@ -14,11 +14,6 @@ class MapCubitState {
   final LocationData? randomLocation;
 
   final GoogleMapController? controller;
-  // final Set<Marker> markers;
-  // final Set<Polyline> polylines;
-
-  // final BitmapDescriptor? sourceIcon;
-  // final BitmapDescriptor? destinationIcon;
 
   final bool loading;
   final bool initialized;
@@ -29,10 +24,6 @@ class MapCubitState {
     this.randomLocation,
     this.loading = false,
     this.initialized = false,
-    // this.sourceIcon,
-    // this.destinationIcon,
-    // this.markers = const {},
-    // this.polylines = const {},
   });
 
   factory MapCubitState.init() => MapCubitState();
@@ -43,10 +34,6 @@ class MapCubitState {
     GoogleMapController? controller,
     bool? loading,
     bool? initialized,
-    // Set<Marker>? markers,
-    // Set<Polyline>? polylines,
-    // BitmapDescriptor? sourceIcon,
-    // BitmapDescriptor? destinationIcon,
   }) {
     return MapCubitState(
       userLocation: userLocation ?? this.userLocation,
@@ -54,10 +41,6 @@ class MapCubitState {
       controller: controller ?? this.controller,
       loading: loading ?? this.loading,
       initialized: initialized ?? this.initialized,
-      // markers: markers ?? this.markers,
-      // polylines: polylines ?? this.polylines,
-      // sourceIcon: sourceIcon ?? this.sourceIcon,
-      // destinationIcon: destinationIcon ?? this.destinationIcon,
     );
   }
 }
@@ -66,8 +49,6 @@ class MapCubit extends Cubit<MapCubitState> {
   MapCubit() : super(MapCubitState.init());
 
   final Completer<GoogleMapController> completer = Completer();
-  // final PolylinePoints polylinePoints = PolylinePoints();
-  // final String googleAPIKey = 'AIzaSyBZD9yjdNSjbZRCrBrh_Zou3DCQjyR5RH4';
 
   void initMap() async {
     if (state.initialized) {
@@ -136,15 +117,6 @@ class MapCubit extends Cubit<MapCubitState> {
     }
   }
 
-  // Future<void> initMarkers() async {
-  //   emit(
-  //     state.copyWith(
-  //       sourceIcon: await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), 'assets/driving_pin.png'),
-  //       destinationIcon: await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5), 'assets/destination_map_marker.png'),
-  //     ),
-  //   );
-  // }
-
   void _updateUserLocation(LocationData location) {
     emit(
       state.copyWith(
@@ -152,21 +124,6 @@ class MapCubit extends Cubit<MapCubitState> {
       ),
     );
   }
-
-  // void newRandomLocation() async {
-  //   final random = await getRandomPlace();
-  //   emit(
-  //     state.copyWith(
-  //       randomLocation: LocationData.fromMap({
-  //         'latitude': random.latitude,
-  //         'longitude': random.longitude,
-  //       }),
-  //     ),
-  //   );
-  //   // setMapPins();
-  //   // setPolylines();
-  //   updateCamera();
-  // }
 
   Future<NearbyPlaceItem> getRandomPlace() async {
     final places = await getNearbyPlaces(10); // 10 KM radius.
@@ -213,68 +170,4 @@ class MapCubit extends Cubit<MapCubitState> {
     }
     emit(state.copyWith(loading: false));
   }
-
-  // void setMapPins() {
-  //   Set<Marker> markers = {};
-  //   markers.add(
-  //     Marker(
-  //       markerId: MarkerId('My location'),
-  //       position: LatLng(
-  //         state.userLocation?.latitude ?? 0,
-  //         state.userLocation?.longitude ?? 0,
-  //       ),
-  //       icon: state.sourceIcon!,
-  //     ),
-  //   );
-  //   markers.add(
-  //     Marker(
-  //       markerId: MarkerId('Random Location'),
-  //       position: LatLng(
-  //         state.randomLocation?.latitude ?? 0,
-  //         state.randomLocation?.longitude ?? 0,
-  //       ),
-  //       icon: state.destinationIcon!,
-  //     ),
-  //   );
-  //   emit(state.copyWith(markers: markers));
-  // }
-
-  // setPolylines() async {
-  //   final result = await polylinePoints.getRouteBetweenCoordinates(
-  //     googleAPIKey,
-  //     PointLatLng(
-  //       state.userLocation?.latitude ?? 0,
-  //       state.userLocation?.longitude ?? 0,
-  //     ),
-  //     PointLatLng(
-  //       state.randomLocation?.latitude ?? 0,
-  //       state.randomLocation?.longitude ?? 0,
-  //     ),
-  //     travelMode: TravelMode.walking,
-  //   );
-  //   final points = result.points;
-  //   var polylineCoordinates = <LatLng>[];
-  //   if (points.isNotEmpty) {
-  //     // loop through all PointLatLng points and convert them
-  //     // to a list of LatLng, required by the Polyline
-  //     points.forEach((PointLatLng point) {
-  //       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-  //     });
-  //   }
-  //   // create a Polyline instance
-  //   // with an id, an RGB color and the list of LatLng pairs
-  //   Polyline polyline = Polyline(
-  //     polylineId: PolylineId('poly'),
-  //     color: Color.fromARGB(255, 40, 122, 198),
-  //     points: polylineCoordinates,
-  //   );
-
-  //   // add the constructed polyline as a set of points
-  //   // to the polyline set, which will eventually
-  //   // end up showing up on the map
-  //   var polylines = <Polyline>{};
-  //   polylines.add(polyline);
-
-  //   emit(state.copyWith(polylines: polylines));
-  // }
 }
