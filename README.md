@@ -44,3 +44,18 @@ I encountered a kind of "small" problem with this. This is the example from the 
 ### Sample output
 
 https://user-images.githubusercontent.com/37391380/125145909-0313d300-e156-11eb-8606-0fa9b67b25d4.mp4
+
+
+### UPDATED MAPS
+There are now two options. 
+- `GO TO RANDOM` - This will select random location and show route polylines inside the app itself.
+- `OPEN RANDOM` - Will select random location and open external map app to show the route.
+
+<table>
+    <tbody>
+        <tr>
+            <td><img src="https://i.imgur.com/xpU28P1.jpg" width=300></td>
+            <td><img src="https://i.imgur.com/3ZbdCeb.jpg" width=300></td>
+        </tr>
+    </tbody>
+</table>
