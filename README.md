@@ -7,6 +7,8 @@ I both added facebook and Google login.
 - In order for the same email from facebook and google account to be used in login, I did not integrate the google login with Firebase Auth, only Facebook.
 - This is in order to prevent the "Email already exists" error from firebase. Only for development/testing. 
 
+**UPDATE:** Integrated google signin with firebase auth.
+
 <hr> 
 
 ## Map with user location and route to a random place

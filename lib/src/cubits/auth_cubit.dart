@@ -69,7 +69,13 @@ class AuthCubit extends Cubit<AuthCubitState> {
     updateState(state.copyWith(loading: true));
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     if (googleUser != null) {
-      updateState(state.copyWith(name: googleUser.displayName));
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final user = await FirebaseAuth.instance.signInWithCredential(credential);
+      updateState(state.copyWith(name: user.user?.displayName ?? ''));
     }
     updateState(state.copyWith(loading: false));
   }
