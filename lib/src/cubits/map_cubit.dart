@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 // import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -28,6 +29,8 @@ class MapCubitState {
 
   final bool loading;
 
+  final double distanceRemaining;
+
   double get targetRouteDistance => targetRoute?.distance ?? 0.0;
   double get targetRouteDuration => targetRoute?.duration ?? 0.0;
   String get randomPlaceName => randomPlace?.displayName ?? '';
@@ -39,6 +42,7 @@ class MapCubitState {
     this.targetRoute,
     this.randomPlace,
     required this.loading,
+    required this.distanceRemaining,
     this.sourceIcon,
     this.destinationIcon,
     required this.markers,
@@ -49,6 +53,7 @@ class MapCubitState {
         loading: true,
         markers: {},
         polylines: {},
+        distanceRemaining: 0.0,
       );
 
   MapCubitState copyWith({
@@ -58,6 +63,7 @@ class MapCubitState {
     NearbyPlaceItem? randomPlace,
     GoogleMapController? controller,
     bool? loading,
+    double? distanceRemaining,
     Set<Marker>? markers,
     Set<Polyline>? polylines,
     BitmapDescriptor? sourceIcon,
@@ -70,6 +76,7 @@ class MapCubitState {
       randomPlace: randomPlace ?? this.randomPlace,
       controller: controller ?? this.controller,
       loading: loading ?? this.loading,
+      distanceRemaining: distanceRemaining ?? this.distanceRemaining,
       markers: markers ?? this.markers,
       polylines: polylines ?? this.polylines,
       sourceIcon: sourceIcon ?? this.sourceIcon,
@@ -85,12 +92,16 @@ class MapCubit extends Cubit<MapCubitState> {
   final Completer<GoogleMapController> completer = Completer();
   final PolylinePoints polylinePoints = PolylinePoints();
 
+  MapBoxNavigation? _directions;
+  MapBoxNavigation get directions => _directions!;
+
   double get long => state.userLocation?.longitude ?? 0.0;
   double get lat => state.userLocation?.latitude ?? 0.0;
 
   void initMap() async {
     emit(state.copyWith(loading: true));
     Location location = new Location();
+    _directions = MapBoxNavigation(onRouteEvent: onRouteEvent);
 
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
@@ -146,7 +157,7 @@ class MapCubit extends Cubit<MapCubitState> {
     );
   }
 
-  void newRandomLocation() async {
+  Future<void> newRandomLocation() async {
     emit(state.copyWith(loading: true));
     final random = await getRandomPlace();
     emit(
@@ -215,10 +226,9 @@ class MapCubit extends Cubit<MapCubitState> {
     emit(state.copyWith(markers: markers));
   }
 
-  Future<void> setPolylines() async {
-    final response = await api.getRoutes(state.userLocation, state.randomLocation);
+  List<LatLng> getCoordinates(RoutesResponse response) {
     if (response.routes.isEmpty) {
-      return;
+      return [];
     }
     final result = polylinePoints.decodePolyline(response.routes[0].geometry);
     var polylineCoordinates = <LatLng>[];
@@ -229,6 +239,12 @@ class MapCubit extends Cubit<MapCubitState> {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
     }
+    return polylineCoordinates;
+  }
+
+  Future<void> setPolylines() async {
+    final response = await api.getRoutes(state.userLocation, state.randomLocation);
+    var polylineCoordinates = getCoordinates(response);
     // create a Polyline instance
     // with an id, an RGB color and the list of LatLng pairs
     Polyline polyline = Polyline(
@@ -244,5 +260,75 @@ class MapCubit extends Cubit<MapCubitState> {
     polylines.add(polyline);
 
     emit(state.copyWith(polylines: polylines, targetRoute: response.routes[0]));
+  }
+
+  MapBoxOptions mapBoxOptions() {
+    return MapBoxOptions(
+      initialLatitude: lat,
+      initialLongitude: long,
+      zoom: 13.0,
+      tilt: 0.0,
+      bearing: 0.0,
+      enableRefresh: false,
+      alternatives: true,
+      voiceInstructionsEnabled: true,
+      bannerInstructionsEnabled: true,
+      allowsUTurnAtWayPoints: true,
+      mode: MapBoxNavigationMode.drivingWithTraffic,
+      // mapStyleUrlDay: "https://url_to_day_style",
+      // mapStyleUrlNight: "https://url_to_night_style",
+      units: VoiceUnits.imperial,
+      simulateRoute: true,
+      language: "en",
+    );
+  }
+
+  Future<void> onRouteEvent(e) async {
+    final distanceRemaining = await directions.distanceRemaining;
+    // _durationRemaining = await _directions.durationRemaining;
+
+    switch (e.eventType) {
+      case MapBoxEvent.progress_change:
+        // var progressEvent = e.data as RouteProgressEvent;
+        // _arrived = progressEvent.arrived;
+        // if (progressEvent.currentStepInstruction != null) _instruction = progressEvent.currentStepInstruction;
+        break;
+      case MapBoxEvent.route_building:
+      case MapBoxEvent.route_built:
+        // _routeBuilt = true;
+        break;
+      case MapBoxEvent.route_build_failed:
+        // _routeBuilt = false;
+        break;
+      case MapBoxEvent.navigation_running:
+        // _isNavigating = true;
+        break;
+      case MapBoxEvent.on_arrival:
+        // _arrived = true;
+        // if (!_isMultipleStop) {
+        //   await Future.delayed(Duration(seconds: 3));
+        //   await _controller.finishNavigation();
+        // } else {}
+        break;
+      case MapBoxEvent.navigation_finished:
+      case MapBoxEvent.navigation_cancelled:
+        // _routeBuilt = false;
+        // _isNavigating = false;
+        break;
+      default:
+        break;
+    }
+    //refresh UI
+    emit(state.copyWith(distanceRemaining: distanceRemaining));
+  }
+
+  Future<List<WayPoint>> getWayPoints() async {
+    final response = await api.getRoutes(state.userLocation, state.randomLocation);
+    var polylineCoordinates = getCoordinates(response);
+    return polylineCoordinates
+        .map(
+          (e) => WayPoint(name: '${e.latitude}', latitude: e.latitude, longitude: e.longitude),
+        )
+        .toList();
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../cubits/cubits.dart';
@@ -16,6 +17,9 @@ class MapScreenView extends StatefulWidget {
 }
 
 class _MapScreenViewState extends State<MapScreenView> {
+  MapBoxNavigationViewController? _controller;
+  MapBoxNavigationViewController get mapBoxController => _controller!;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -41,27 +45,36 @@ class _MapScreenViewState extends State<MapScreenView> {
         }
         return Column(
           children: [
+            // Expanded(
+            //   child: GoogleMap(
+            //     initialCameraPosition: CameraPosition(
+            //       target: LatLng(userLocation?.latitude ?? 0, userLocation?.longitude ?? 0),
+            //       zoom: CAMERA_ZOOM,
+            //       bearing: CAMERA_BEARING,
+            //       tilt: CAMERA_TILT,
+            //     ),
+            //     myLocationEnabled: true,
+            //     compassEnabled: true,
+            //     tiltGesturesEnabled: false,
+            //     markers: snapshot.markers,
+            //     polylines: snapshot.polylines,
+            //     mapType: MapType.normal,
+            //     onMapCreated: (controller) {
+            //       mapCubit(context).activateMap(controller);
+            //     },
+            //     gestureRecognizers: {
+            //       Factory<OneSequenceGestureRecognizer>(
+            //         () => EagerGestureRecognizer(),
+            //       ),
+            //     },
+            //   ),
+            // ),
             Expanded(
-              child: GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(userLocation?.latitude ?? 0, userLocation?.longitude ?? 0),
-                  zoom: CAMERA_ZOOM,
-                  bearing: CAMERA_BEARING,
-                  tilt: CAMERA_TILT,
-                ),
-                myLocationEnabled: true,
-                compassEnabled: true,
-                tiltGesturesEnabled: false,
-                markers: snapshot.markers,
-                polylines: snapshot.polylines,
-                mapType: MapType.normal,
-                onMapCreated: (controller) {
-                  mapCubit(context).activateMap(controller);
-                },
-                gestureRecognizers: {
-                  Factory<OneSequenceGestureRecognizer>(
-                    () => EagerGestureRecognizer(),
-                  ),
+              child: MapBoxNavigationView(
+                options: mapCubit(context).mapBoxOptions(),
+                onRouteEvent: mapCubit(context).onRouteEvent,
+                onCreated: (controller) {
+                  _controller = controller;
                 },
               ),
             ),
@@ -105,8 +118,21 @@ class _MapScreenViewState extends State<MapScreenView> {
                   children: [
                     ElevatedButton(
                       child: Text('GO TO RANDOM'),
-                      onPressed: () {
-                        mapCubit(context).newRandomLocation();
+                      onPressed: () async {
+                        final cubit = mapCubit(context);
+                        await cubit.newRandomLocation();
+                        final wayPoints = await mapCubit(context).getWayPoints();
+                        // final built = await mapBoxController.buildRoute(
+                        //   wayPoints: wayPoints,
+                        //   options: mapCubit(context).mapBoxOptions(),
+                        // );
+                        // if (built) {
+                        //   await mapBoxController.startNavigation();
+                        // }
+                        await cubit.directions.startNavigation(
+                          wayPoints: wayPoints,
+                          options: cubit.mapBoxOptions(),
+                        );
                       },
                     ),
                     SizedBox(width: 16),
