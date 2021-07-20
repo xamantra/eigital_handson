@@ -31,6 +31,7 @@ dependencies:
   map_launcher: 2.1.1
   flutter_polyline_points: 1.0.0 # unused due to google cloud billing limitations
   vector_math: 2.1.0 # unused, random long-lat is not the correct solution.
+  flutter_mapbox_navigation: 0.0.24
   # maps
 
   # newsfeed

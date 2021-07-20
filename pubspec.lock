@@ -153,6 +153,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.0+2"
+  flutter_mapbox_navigation:
+    dependency: "direct main"
+    description:
+      name: flutter_mapbox_navigation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.24"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

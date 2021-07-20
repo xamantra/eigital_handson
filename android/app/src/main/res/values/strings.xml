@@ -2,4 +2,7 @@
 <resources>
   <string name="facebook_app_id">520092909340986</string>
   <string name="fb_login_protocol_scheme">fb520092909340986</string>
+  <string name="mapbox_access_token" translatable="false">sk.eyJ1IjoieGFtYW50cmEiLCJhIjoiY2tyYmpqMWM0NHR5djJwbzZ2c2RuZ3B3ayJ9.SzlY6G_Vq4Uqtg7imPzFkg</string>
+  <string name="user_location_permission_explanation">This app needs location permissions to show its functionality.</string>
+  <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
 </resources>
